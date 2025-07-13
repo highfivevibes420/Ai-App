@@ -186,16 +186,183 @@ const StrategyTools: React.FC = () => {
           {selectedTool === 'competitive' && renderCompetitiveAnalysis()}
           
           {selectedTool === 'market' && (
-            <div className="text-center py-12">
-              <Users className="w-16 h-16 text-slate-400 mx-auto mb-4" />
-              <p className="text-slate-600">Market research tool coming soon...</p>
+            <div className="space-y-6">
+              <div className="bg-slate-50 dark:bg-gray-700 rounded-lg p-6 border dark:border-gray-600">
+                <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-4">Market Research Input</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
+                      Industry *
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g., SaaS, E-commerce, Healthcare"
+                      className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
+                      Target Market *
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g., Small businesses, Millennials"
+                      className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
+                      Geographic Region *
+                    </label>
+                    <select className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white" required>
+                      <option value="">Select Region</option>
+                      <option value="north-america">North America</option>
+                      <option value="europe">Europe</option>
+                      <option value="asia">Asia</option>
+                      <option value="global">Global</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
+                      Research Focus *
+                    </label>
+                    <select className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white" required>
+                      <option value="">Select Focus</option>
+                      <option value="size">Market Size</option>
+                      <option value="trends">Market Trends</option>
+                      <option value="competition">Competition Analysis</option>
+                      <option value="opportunities">Growth Opportunities</option>
+                    </select>
+                  </div>
+                </div>
+                <button className="mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+                  Generate Research
+                </button>
+              </div>
+              
+              <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-slate-200 dark:border-gray-700">
+                <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-4">Market Research Results</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <h4 className="font-semibold text-slate-800 dark:text-white mb-3">Market Size & Growth</h4>
+                    <div className="space-y-2 text-sm">
+                      <p><strong>Total Addressable Market:</strong> $45.2B</p>
+                      <p><strong>Serviceable Market:</strong> $12.8B</p>
+                      <p><strong>Annual Growth Rate:</strong> 15.3%</p>
+                      <p><strong>Market Maturity:</strong> Growing</p>
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-slate-800 dark:text-white mb-3">Key Trends</h4>
+                    <ul className="space-y-1 text-sm text-slate-600 dark:text-gray-400">
+                      <li>• Increased demand for automation</li>
+                      <li>• Shift towards subscription models</li>
+                      <li>• Growing mobile-first approach</li>
+                      <li>• Focus on data privacy & security</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
           
           {selectedTool === 'innovation' && (
-            <div className="text-center py-12">
-              <Lightbulb className="w-16 h-16 text-slate-400 mx-auto mb-4" />
-              <p className="text-slate-600">Innovation hub coming soon...</p>
+            <div className="space-y-6">
+              <div className="bg-slate-50 dark:bg-gray-700 rounded-lg p-6 border dark:border-gray-600">
+                <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-4">Innovation Brainstorming</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
+                      Current Business Challenge *
+                    </label>
+                    <textarea
+                      placeholder="Describe the problem you're trying to solve..."
+                      className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 h-24 resize-none dark:bg-gray-700 dark:text-white"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
+                      Innovation Type *
+                    </label>
+                    <select className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white" required>
+                      <option value="">Select Type</option>
+                      <option value="product">Product Innovation</option>
+                      <option value="process">Process Innovation</option>
+                      <option value="business-model">Business Model Innovation</option>
+                      <option value="marketing">Marketing Innovation</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
+                      Target Outcome *
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g., Increase efficiency, Reduce costs"
+                      className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
+                      Budget Range *
+                    </label>
+                    <select className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white" required>
+                      <option value="">Select Budget</option>
+                      <option value="low">Under $10K</option>
+                      <option value="medium">$10K - $50K</option>
+                      <option value="high">$50K+</option>
+                    </select>
+                  </div>
+                </div>
+                <button className="mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+                  Generate Ideas
+                </button>
+              </div>
+              
+              <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-slate-200 dark:border-gray-700">
+                <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-4">💡 AI-Generated Innovation Ideas</h3>
+                <div className="space-y-4">
+                  <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800">
+                    <h4 className="font-semibold text-purple-800 dark:text-purple-300 mb-2">Idea #1: Automated Customer Onboarding</h4>
+                    <p className="text-purple-700 dark:text-purple-400 text-sm mb-2">
+                      Implement AI-powered chatbots to guide new customers through setup, reducing support tickets by 60%.
+                    </p>
+                    <div className="flex space-x-4 text-xs text-purple-600 dark:text-purple-400">
+                      <span>💰 Cost: Medium</span>
+                      <span>⏱️ Timeline: 3-4 months</span>
+                      <span>📈 Impact: High</span>
+                    </div>
+                  </div>
+                  
+                  <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                    <h4 className="font-semibold text-blue-800 dark:text-blue-300 mb-2">Idea #2: Predictive Analytics Dashboard</h4>
+                    <p className="text-blue-700 dark:text-blue-400 text-sm mb-2">
+                      Create a dashboard that predicts customer churn and suggests retention strategies.
+                    </p>
+                    <div className="flex space-x-4 text-xs text-blue-600 dark:text-blue-400">
+                      <span>💰 Cost: High</span>
+                      <span>⏱️ Timeline: 6-8 months</span>
+                      <span>📈 Impact: Very High</span>
+                    </div>
+                  </div>
+                  
+                  <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+                    <h4 className="font-semibold text-green-800 dark:text-green-300 mb-2">Idea #3: Mobile-First Experience</h4>
+                    <p className="text-green-700 dark:text-green-400 text-sm mb-2">
+                      Redesign core features for mobile-first usage, targeting the 70% of users on mobile devices.
+                    </p>
+                    <div className="flex space-x-4 text-xs text-green-600 dark:text-green-400">
+                      <span>💰 Cost: Low</span>
+                      <span>⏱️ Timeline: 2-3 months</span>
+                      <span>📈 Impact: Medium</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
         </div>

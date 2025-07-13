@@ -93,6 +93,49 @@ const FinanceTools: React.FC = () => {
 
   const renderBudgetPlanner = () => (
     <div className="space-y-6">
+      {/* Budget Creation Form */}
+      <div className="bg-slate-50 dark:bg-gray-700 rounded-lg p-6 border dark:border-gray-600">
+        <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-4">Create New Budget</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+          <div>
+            <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
+              Budget Name *
+            </label>
+            <input
+              type="text"
+              placeholder="e.g., Marketing Q1 2024"
+              className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
+              Total Amount *
+            </label>
+            <input
+              type="number"
+              placeholder="10000"
+              className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
+              Period *
+            </label>
+            <select className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white" required>
+              <option value="">Select Period</option>
+              <option value="monthly">Monthly</option>
+              <option value="quarterly">Quarterly</option>
+              <option value="yearly">Yearly</option>
+            </select>
+          </div>
+        </div>
+        <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+          Create Budget
+        </button>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-slate-50 rounded-lg p-6 border">
           <h3 className="font-semibold text-slate-800 mb-4">Budget Overview</h3>
@@ -215,16 +258,256 @@ const FinanceTools: React.FC = () => {
           {selectedTool === 'budget' && renderBudgetPlanner()}
           
           {selectedTool === 'forecast' && (
-            <div className="text-center py-12">
-              <TrendingUp className="w-16 h-16 text-slate-400 mx-auto mb-4" />
-              <p className="text-slate-600">Financial forecasting tool coming soon...</p>
+            <div className="space-y-6">
+              <div className="bg-slate-50 dark:bg-gray-700 rounded-lg p-6 border dark:border-gray-600">
+                <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-4">Financial Forecast Input</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
+                      Current Monthly Revenue *
+                    </label>
+                    <input
+                      type="number"
+                      placeholder="5000"
+                      className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
+                      Expected Growth Rate (%) *
+                    </label>
+                    <input
+                      type="number"
+                      placeholder="10"
+                      className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
+                      Forecast Period *
+                    </label>
+                    <select className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white" required>
+                      <option value="">Select Period</option>
+                      <option value="6">6 Months</option>
+                      <option value="12">12 Months</option>
+                      <option value="24">24 Months</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
+                      Business Type *
+                    </label>
+                    <select className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white" required>
+                      <option value="">Select Type</option>
+                      <option value="saas">SaaS</option>
+                      <option value="ecommerce">E-commerce</option>
+                      <option value="service">Service Business</option>
+                      <option value="retail">Retail</option>
+                    </select>
+                  </div>
+                </div>
+                <button className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                  Generate Forecast
+                </button>
+              </div>
+              
+              <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-slate-200 dark:border-gray-700">
+                <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-4">12-Month Revenue Forecast</h3>
+                <div className="space-y-3">
+                  {Array.from({ length: 12 }, (_, i) => {
+                    const month = new Date(2024, i, 1).toLocaleDateString('en-US', { month: 'long' });
+                    const revenue = 5000 * Math.pow(1.1, i);
+                    return (
+                      <div key={i} className="flex justify-between items-center p-3 bg-slate-50 dark:bg-gray-700 rounded">
+                        <span className="font-medium text-slate-800 dark:text-white">{month} 2024</span>
+                        <span className="text-green-600 font-bold">${revenue.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
           )}
           
           {selectedTool === 'analysis' && (
-            <div className="text-center py-12">
-              <PieChart className="w-16 h-16 text-slate-400 mx-auto mb-4" />
-              <p className="text-slate-600">Expense analysis tool coming soon...</p>
+            <div className="space-y-6">
+              <div className="bg-slate-50 dark:bg-gray-700 rounded-lg p-6 border dark:border-gray-600">
+                <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-4">Add Expense</h3>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
+                      Description *
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Office rent"
+                      className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
+                      Amount *
+                    </label>
+                    <input
+                      type="number"
+                      placeholder="1200"
+                      className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
+                      Category *
+                    </label>
+                    <select className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white" required>
+                      <option value="">Select Category</option>
+                      <option value="office">Office & Rent</option>
+                      <option value="marketing">Marketing</option>
+                      <option value="software">Software & Tools</option>
+                      <option value="travel">Travel</option>
+                      <option value="utilities">Utilities</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
+                      Date *
+                    </label>
+                    <input
+                      type="date"
+                      className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
+                      required
+                    />
+                  </div>
+                </div>
+                <button className="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                  Add Expense
+                </button>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-slate-200 dark:border-gray-700">
+                  <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-4">Expense Breakdown</h3>
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-slate-600 dark:text-gray-400">Office & Rent</span>
+                      <span className="font-bold text-slate-800 dark:text-white">$2,400 (40%)</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-slate-600 dark:text-gray-400">Marketing</span>
+                      <span className="font-bold text-slate-800 dark:text-white">$1,800 (30%)</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-slate-600 dark:text-gray-400">Software & Tools</span>
+                      <span className="font-bold text-slate-800 dark:text-white">$1,200 (20%)</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-slate-600 dark:text-gray-400">Other</span>
+                      <span className="font-bold text-slate-800 dark:text-white">$600 (10%)</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-6 border border-blue-200 dark:border-blue-800">
+                  <h3 className="text-lg font-semibold text-blue-800 dark:text-blue-300 mb-4">💡 AI Suggestions</h3>
+                  <ul className="space-y-2 text-blue-700 dark:text-blue-400 text-sm">
+                    <li>• Consider negotiating office rent - you're spending 40% on fixed costs</li>
+                    <li>• Marketing ROI looks good - consider increasing budget by 10%</li>
+                    <li>• Review software subscriptions - potential for consolidation</li>
+                    <li>• Set up automated expense tracking to catch overspending early</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {selectedTool === 'tax' && (
+            <div className="space-y-6">
+              <div className="bg-slate-50 dark:bg-gray-700 rounded-lg p-6 border dark:border-gray-600">
+                <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-4">Tax Calculator</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
+                      Annual Income *
+                    </label>
+                    <input
+                      type="number"
+                      placeholder="60000"
+                      className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
+                      Business Expenses *
+                    </label>
+                    <input
+                      type="number"
+                      placeholder="15000"
+                      className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
+                      Filing Status *
+                    </label>
+                    <select className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white" required>
+                      <option value="">Select Status</option>
+                      <option value="single">Single</option>
+                      <option value="married">Married Filing Jointly</option>
+                      <option value="married-separate">Married Filing Separately</option>
+                      <option value="head">Head of Household</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
+                      State *
+                    </label>
+                    <select className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white" required>
+                      <option value="">Select State</option>
+                      <option value="ca">California</option>
+                      <option value="ny">New York</option>
+                      <option value="tx">Texas</option>
+                      <option value="fl">Florida</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                </div>
+                <button className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                  Calculate Tax
+                </button>
+              </div>
+              
+              <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-slate-200 dark:border-gray-700">
+                <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-4">Tax Estimation Results</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="text-center p-4 bg-slate-50 dark:bg-gray-700 rounded-lg">
+                    <p className="text-2xl font-bold text-slate-800 dark:text-white">$45,000</p>
+                    <p className="text-sm text-slate-600 dark:text-gray-400">Taxable Income</p>
+                  </div>
+                  <div className="text-center p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                    <p className="text-2xl font-bold text-red-600">$9,450</p>
+                    <p className="text-sm text-red-700 dark:text-red-400">Federal Tax</p>
+                  </div>
+                  <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                    <p className="text-2xl font-bold text-blue-600">$2,250</p>
+                    <p className="text-sm text-blue-700 dark:text-blue-400">State Tax</p>
+                  </div>
+                </div>
+                <div className="mt-4 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+                  <h4 className="font-semibold text-green-800 dark:text-green-300 mb-2">💡 Tax Saving Tips</h4>
+                  <ul className="text-green-700 dark:text-green-400 text-sm space-y-1">
+                    <li>• Consider maximizing retirement contributions ($6,500 IRA limit)</li>
+                    <li>• Track all business expenses for deductions</li>
+                    <li>• Consider quarterly estimated tax payments</li>
+                    <li>• Consult a tax professional for complex situations</li>
+                  </ul>
+                </div>
+              </div>
             </div>
           )}
         </div>

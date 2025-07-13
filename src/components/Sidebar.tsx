@@ -58,6 +58,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     { id: 'operations', label: 'Operations', icon: BarChart3 },
     { id: 'portfolio', label: 'Portfolio', icon: Globe },
     { id: 'crm', label: 'CRM & Leads', icon: Users },
+    { id: 'admin', label: 'Admin Panel', icon: Shield },
   ];
 
   const handleMenuClick = (sectionId: string) => {

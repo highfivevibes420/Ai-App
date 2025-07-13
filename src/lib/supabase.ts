@@ -152,6 +152,22 @@ export const auth = {
     return await supabase.auth.getSession()
   }
 }
+  async updatePassword(newPassword: string) {
+    if (isDemoMode || !supabase) {
+      console.log('📱 Demo mode: Password update simulated')
+      return { error: null }
+    }
+    
+    try {
+      console.log('🔐 Updating password...')
+      const result = await supabase.auth.updateUser({ password: newPassword })
+      console.log('✅ Password update result:', { success: !result.error })
+      return result
+    } catch (error) {
+      console.error('❌ Password update error:', error)
+      return { error: error as any }
+    }
+  }
 
 // Email service
 export const emailService = {

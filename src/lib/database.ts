@@ -911,5 +911,87 @@ export const database = {
       console.error('❌ Update payment status error:', error)
       return { data: null, error }
     }
+  },
+
+  async deleteAllUserData(userId?: string) {
+    if (isDemoMode) {
+      // Clear all demo data
+      localStorage.removeItem('demoUser')
+      localStorage.removeItem('userTier')
+      localStorage.removeItem('userTierUsage')
+      localStorage.removeItem('expenses')
+      localStorage.removeItem('income')
+      localStorage.removeItem('aiBusinessUser')
+      localStorage.removeItem('userSettings')
+      localStorage.removeItem('lastPayment')
+      
+      // Reset demo data
+      demoData = {
+        invoices: [],
+        campaigns: [],
+        tasks: [],
+        portfolios: [],
+        leads: [],
+        payments: [],
+        posts: []
+      }
+      
+      return { data: { deleted: true }, error: null }
+    }
+    
+    if (!userId) {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return { data: null, error: 'No user found' }
+      userId = user.id
+    }
+    
+    try {
+      console.log('🗑️ Deleting all user data for:', userId)
+      
+      // Delete all user-related data in order (respecting foreign key constraints)
+      const tables = [
+        'notifications',
+        'email_templates', 
+        'team_members',
+        'leads',
+        'portfolios',
+        'user_settings',
+        'payments',
+        'usage_tracking',
+        'tasks',
+        'campaigns',
+        'invoices',
+        'subscriptions',
+        'users'
+      ]
+      
+      for (const table of tables) {
+        const { error } = await supabase
+          .from(table)
+          .delete()
+          .eq('user_id', userId)
+        
+        if (error && error.code !== 'PGRST116') {
+          console.error(`❌ Error deleting from ${table}:`, error)
+        }
+      }
+      
+      // Finally delete the user account
+      const { error: userError } = await supabase
+        .from('users')
+        .delete()
+        .eq('id', userId)
+      
+      if (userError) {
+        console.error('❌ Error deleting user:', userError)
+        return { data: null, error: userError }
+      }
+      
+      console.log('✅ All user data deleted successfully')
+      return { data: { deleted: true }, error: null }
+    } catch (error) {
+      console.error('❌ Delete user data error:', error)
+      return { data: null, error }
+    }
   }
 }

@@ -14,6 +14,8 @@ import PortfolioBuilder from './components/PortfolioBuilder';
 import CRMDashboard from './components/CRMDashboard';
 import PostMaker from './components/PostMaker';
 import AccountingTools from './components/AccountingTools';
+import AdminPanel from './components/AdminPanel';
+import PublicPortfolio from './components/PublicPortfolio';
 import { database } from './lib/database';
 import { emailService, auth, isDemoMode } from './lib/supabase';
 import { Menu } from 'lucide-react';
@@ -36,6 +38,14 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Check if this is a portfolio route
+    const path = window.location.pathname;
+    if (path.startsWith('/portfolio/')) {
+      const slug = path.split('/portfolio/')[1];
+      setCurrentPage('portfolio-public');
+      return;
+    }
+    
     initializeApp();
     
     // Listen for settings modal
@@ -91,6 +101,12 @@ function App() {
     setLoading(false);
   };
 
+  // Handle public portfolio route
+  if (currentPage === 'portfolio-public') {
+    const slug = window.location.pathname.split('/portfolio/')[1];
+    return <PublicPortfolio slug={slug} />;
+  }
+
   const handleLogin = async (userData: User) => {
     setUser(userData);
     localStorage.setItem('aiBusinessUser', JSON.stringify(userData));
@@ -140,6 +156,8 @@ function App() {
         return <PostMaker />;
       case 'accounting':
         return <AccountingTools />;
+      case 'admin':
+        return <AdminPanel />;
       default:
         return <Dashboard setActiveSection={setActiveSection} user={user} />;
     }

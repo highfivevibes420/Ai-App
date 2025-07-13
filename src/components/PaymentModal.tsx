@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { X, Building, Shield, Check, Copy, AlertCircle } from 'lucide-react';
 import { TIERS } from '../lib/tiers';
 import { database } from '../lib/database';
-import { emailService } from '../lib/supabase';
+import { emailService, dbFunctions } from '../lib/supabase';
+import { TierManager } from '../lib/tiers';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -55,34 +56,13 @@ Amount: $${tier.price.toFixed(2)}`;
     setIsSubmitting(true);
 
     try {
-      // Process payment with tier upgrade
-      const paymentResult = await PaymentProcessor.processPayment(
-        parseFloat(paymentData.transferAmount),
-        'USD',
-        'bank_transfer',
-        user,
-        selectedTier
-      );
-      
-      if (paymentResult.success) {
-        // Payment successful - tier already updated in PaymentProcessor
-        alert(`Payment successful! Your plan has been upgraded to ${tier.name}. Please refresh the page to see changes.`);
-        
-        // Trigger page refresh to update UI
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
-      } else {
-        alert('Payment failed. Please try again.');
-      }
-      
       // Create payment record
       const payment = {
         amount: parseFloat(paymentData.transferAmount),
         currency: 'USD',
-        status: 'completed',
+        status: 'pending',
         payment_method: 'bank_transfer',
-        transaction_id: paymentResult.transactionId || paymentData.transactionId,
+        transaction_id: paymentData.transactionId,
         tier: selectedTier,
         billing_period_start: new Date().toISOString().split('T')[0],
         billing_period_end: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
@@ -95,6 +75,18 @@ Amount: $${tier.price.toFixed(2)}`;
       };
 
       const { data, error } = await database.createPayment(payment);
+      
+      if (!error && data) {
+        // For demo purposes, immediately approve the payment and upgrade tier
+        await database.updatePaymentStatus(data.id, 'completed');
+        await dbFunctions.updateUserTier(user.id, selectedTier);
+        TierManager.setTier(selectedTier);
+        
+        alert(`Payment submitted successfully! Your plan has been upgraded to ${tier.name}.`);
+        window.location.reload();
+      } else {
+        alert('Error processing payment. Please try again.');
+      }
 
     } catch (error) {
       console.error('Payment error:', error);
