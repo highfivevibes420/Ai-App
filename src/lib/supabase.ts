@@ -150,7 +150,7 @@ export const auth = {
       return demoUser ? { data: { session: { user: JSON.parse(demoUser) } }, error: null } : { data: { session: null }, error: null }
     }
     return await supabase.auth.getSession()
-  }
+  },
 }
   async updatePassword(newPassword: string) {
     if (isDemoMode || !supabase) {
