@@ -13,7 +13,8 @@ import {
   Activity,
   UserX
 } from 'lucide-react';
-import { database, dbFunctions } from '../lib/database';
+import { database } from '../lib/database';
+import { dbFunctions } from '../lib/supabase';
 
 const AdminPanel: React.FC = () => {
   const [users, setUsers] = useState<any[]>([]);
