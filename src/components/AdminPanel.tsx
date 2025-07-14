@@ -17,6 +17,23 @@ import { database } from '../lib/database';
 import { dbFunctions } from '../lib/supabase';
 
 const AdminPanel: React.FC = () => {
+  // Check if user is admin
+  const isAdmin = () => {
+    const userData = JSON.parse(localStorage.getItem('aiBusinessUser') || '{}');
+    return userData.email === 'admin@example.com' || userData.email === 'ayyan@digitalsolutions.com';
+  };
+
+  if (!isAdmin()) {
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-slate-800 dark:text-white mb-4">Access Denied</h1>
+          <p className="text-slate-600 dark:text-gray-400">You don't have permission to access the admin panel.</p>
+        </div>
+      </div>
+    );
+  }
+
   const [users, setUsers] = useState<any[]>([]);
   const [payments, setPayments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);

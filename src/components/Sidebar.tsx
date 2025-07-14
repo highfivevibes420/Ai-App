@@ -59,9 +59,16 @@ const Sidebar: React.FC<SidebarProps> = ({
     { id: 'operations', label: 'Operations', icon: BarChart3 },
     { id: 'portfolio', label: 'Portfolio', icon: Globe },
     { id: 'crm', label: 'CRM & Leads', icon: Users },
-    { id: 'admin', label: 'Admin Panel', icon: Shield },
   ];
 
+  // Only show admin panel for admin users
+  const isAdmin = user?.email === 'admin@example.com' || user?.email === 'ayyan@digitalsolutions.com';
+  
+  const adminMenuItems = isAdmin ? [
+    { id: 'admin', label: 'Admin Panel', icon: Shield },
+  ] : [];
+
+  const allMenuItems = [...menuItems, ...adminMenuItems];
   const handleMenuClick = (sectionId: string) => {
     setActiveSection(sectionId);
     if (setSidebarOpen) {
@@ -160,7 +167,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           </div>
           
           <nav className="space-y-2">
-            {menuItems.map((item) => {
+            {allMenuItems.map((item) => {
               const IconComponent = item.icon;
               return (
                 <button

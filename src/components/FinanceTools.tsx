@@ -379,6 +379,7 @@ const FinanceTools: React.FC = () => {
                     <input
                       type="date"
                       className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
+                      value={new Date().toISOString().split('T')[0]}
                       required
                     />
                   </div>
@@ -568,13 +569,43 @@ const FinanceTools: React.FC = () => {
                     <td className="py-3 px-4">
                       <div className="flex space-x-2">
                         <button 
-                          onClick={() => alert('Invoice view feature coming soon!')}
+                          onClick={() => {
+                            const invoiceWindow = window.open('', '_blank');
+                            if (invoiceWindow) {
+                              invoiceWindow.document.write(`
+                                <html>
+                                  <head><title>Invoice ${invoice.invoice_number}</title></head>
+                                  <body style="font-family: Arial, sans-serif; padding: 20px;">
+                                    <h1>Invoice ${invoice.invoice_number}</h1>
+                                    <p><strong>Client:</strong> ${invoice.client_name}</p>
+                                    <p><strong>Email:</strong> ${invoice.client_email}</p>
+                                    <p><strong>Amount:</strong> $${invoice.amount?.toLocaleString()}</p>
+                                    <p><strong>Status:</strong> ${invoice.status}</p>
+                                    <p><strong>Created:</strong> ${new Date(invoice.created_at).toLocaleDateString()}</p>
+                                    <p><strong>Due Date:</strong> ${invoice.due_date}</p>
+                                  </body>
+                                </html>
+                              `);
+                              invoiceWindow.document.close();
+                            }
+                          }}
                           className="p-1 text-blue-600 hover:bg-blue-50 rounded"
                         >
                           <Eye className="w-4 h-4" />
                         </button>
                         <button 
-                          onClick={() => alert('Invoice edit feature coming soon!')}
+                          onClick={() => {
+                            const newAmount = prompt('Enter new amount:', invoice.amount?.toString());
+                            if (newAmount && !isNaN(parseFloat(newAmount))) {
+                              const updatedInvoices = savedInvoices.map(inv => 
+                                inv.id === invoice.id 
+                                  ? { ...inv, amount: parseFloat(newAmount) }
+                                  : inv
+                              );
+                              setSavedInvoices(updatedInvoices);
+                              alert('Invoice updated successfully!');
+                            }
+                          }}
                           className="p-1 text-slate-600 hover:bg-slate-50 rounded"
                         >
                           <Edit className="w-4 h-4" />

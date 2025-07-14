@@ -305,6 +305,7 @@ const OperationsTools: React.FC = () => {
                     <input
                       type="date"
                       className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 dark:bg-gray-700 dark:text-white"
+                      value={new Date().toISOString().split('T')[0]}
                       required
                     />
                   </div>

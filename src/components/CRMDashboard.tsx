@@ -425,6 +425,27 @@ const CRMDashboard: React.FC = () => {
                       <div className="flex space-x-2">
                         <button
                           onClick={() => {
+                            const leadWindow = window.open('', '_blank');
+                            if (leadWindow) {
+                              leadWindow.document.write(`
+                                <html>
+                                  <head><title>Lead Details - ${lead.name}</title></head>
+                                  <body style="font-family: Arial, sans-serif; padding: 20px;">
+                                    <h1>Lead Details</h1>
+                                    <p><strong>Name:</strong> ${lead.name}</p>
+                                    <p><strong>Email:</strong> ${lead.email}</p>
+                                    <p><strong>Phone:</strong> ${lead.phone || 'N/A'}</p>
+                                    <p><strong>Company:</strong> ${lead.company || 'N/A'}</p>
+                                    <p><strong>Source:</strong> ${lead.source}</p>
+                                    <p><strong>Status:</strong> ${lead.status}</p>
+                                    <p><strong>Notes:</strong> ${lead.notes || 'No notes'}</p>
+                                    <p><strong>Created:</strong> ${new Date(lead.created_at).toLocaleDateString()}</p>
+                                  </body>
+                                </html>
+                              `);
+                              leadWindow.document.close();
+                            }
+                          }}
                             setEditingLead(lead);
                             setShowAddModal(true);
                           }}
@@ -435,7 +456,15 @@ const CRMDashboard: React.FC = () => {
                         <button className="p-1 text-slate-600 dark:text-gray-400 hover:bg-slate-50 dark:hover:bg-gray-700 rounded">
                           <Eye className="w-4 h-4" />
                         </button>
-                        <button className="p-1 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded">
+                        <button 
+                          onClick={() => {
+                            if (confirm('Are you sure you want to delete this lead?')) {
+                              setLeads(prev => prev.filter(l => l.id !== lead.id));
+                              alert('Lead deleted successfully!');
+                            }
+                          }}
+                          className="p-1 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded"
+                        >
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </div>

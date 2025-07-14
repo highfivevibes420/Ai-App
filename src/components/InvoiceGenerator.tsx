@@ -233,32 +233,36 @@ const InvoiceGenerator: React.FC<InvoiceGeneratorProps> = ({ onSave }) => {
   };
 
   const InvoicePreview = () => (
-    <div ref={invoiceRef} className="bg-white p-8 max-w-4xl mx-auto">
+    <div ref={invoiceRef} className="bg-white p-8 max-w-4xl mx-auto" style={{ minHeight: '297mm', width: '210mm' }}>
       {/* Header */}
       <div className="flex justify-between items-start mb-8">
         <div className="flex items-center space-x-4">
           {invoiceData.logo && (
-            <img src={invoiceData.logo} alt="Company Logo" className="h-16 w-auto" />
+            <img src={invoiceData.logo} alt="Company Logo" className="h-16 w-auto max-w-32" />
           )}
           <div>
             <h1 className="text-2xl font-bold text-slate-800">{invoiceData.companyName}</h1>
-            <p className="text-slate-600">{invoiceData.companyAddress}</p>
-            <p className="text-slate-600">{invoiceData.companyEmail}</p>
-            <p className="text-slate-600">{invoiceData.companyPhone}</p>
+            <div className="text-slate-600 text-sm">
+              <p>{invoiceData.companyAddress}</p>
+              <p>{invoiceData.companyEmail}</p>
+              <p>{invoiceData.companyPhone}</p>
+            </div>
           </div>
         </div>
         <div className="text-right">
           <h2 className="text-3xl font-bold text-slate-800">INVOICE</h2>
-          <p className="text-slate-600">#{invoiceData.invoiceNumber}</p>
-          <p className="text-slate-600">Date: {new Date().toLocaleDateString()}</p>
-          <p className="text-slate-600">Due: {invoiceData.dueDate}</p>
+          <div className="text-slate-600 text-sm">
+            <p>#{invoiceData.invoiceNumber}</p>
+            <p>Date: {new Date().toLocaleDateString()}</p>
+            <p>Due: {invoiceData.dueDate}</p>
+          </div>
         </div>
       </div>
 
       {/* Bill To */}
       <div className="mb-8">
         <h3 className="text-lg font-semibold text-slate-800 mb-2">Bill To:</h3>
-        <div className="text-slate-600">
+        <div className="text-slate-600 text-sm">
           <p className="font-medium">{invoiceData.clientName}</p>
           <p>{invoiceData.clientEmail}</p>
           <p className="whitespace-pre-line">{invoiceData.clientAddress}</p>
@@ -267,9 +271,9 @@ const InvoiceGenerator: React.FC<InvoiceGeneratorProps> = ({ onSave }) => {
 
       {/* Items Table */}
       <div className="mb-8">
-        <table className="w-full border-collapse border border-slate-300">
+        <table className="w-full border-collapse border border-slate-300 text-sm">
           <thead>
-            <tr className="bg-slate-100">
+            <tr className="bg-slate-50">
               <th className="border border-slate-300 px-4 py-2 text-left">Description</th>
               <th className="border border-slate-300 px-4 py-2 text-center">Qty</th>
               <th className="border border-slate-300 px-4 py-2 text-right">Rate</th>
@@ -291,7 +295,7 @@ const InvoiceGenerator: React.FC<InvoiceGeneratorProps> = ({ onSave }) => {
 
       {/* Totals */}
       <div className="flex justify-end mb-8">
-        <div className="w-64">
+        <div className="w-64 text-sm">
           <div className="flex justify-between py-2">
             <span>Subtotal:</span>
             <span>${calculateSubtotal().toFixed(2)}</span>
@@ -302,7 +306,7 @@ const InvoiceGenerator: React.FC<InvoiceGeneratorProps> = ({ onSave }) => {
               <span>${calculateTax().toFixed(2)}</span>
             </div>
           )}
-          <div className="flex justify-between py-2 border-t border-slate-300 font-bold text-lg">
+          <div className="flex justify-between py-2 border-t border-slate-300 font-bold">
             <span>Total:</span>
             <span>${calculateTotal().toFixed(2)}</span>
           </div>
@@ -310,7 +314,7 @@ const InvoiceGenerator: React.FC<InvoiceGeneratorProps> = ({ onSave }) => {
       </div>
 
       {/* Payment Information */}
-      <div className="mb-8 p-4 bg-slate-50 rounded-lg border">
+      <div className="mb-8 p-4 bg-slate-50 border">
         <h4 className="font-semibold text-slate-800 mb-3">Payment Information</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
           <div>
@@ -330,20 +334,19 @@ const InvoiceGenerator: React.FC<InvoiceGeneratorProps> = ({ onSave }) => {
             <p className="font-medium text-slate-800">{invoiceData.paymentInfo.iban}</p>
           </div>
         </div>
-      </div>
-
+        <div className="mt-4 p-3 bg-green-50 border border-green-200">
       {/* Notes and Terms */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm">
         {invoiceData.notes && (
           <div>
             <h4 className="font-semibold text-slate-800 mb-2">Notes:</h4>
-            <p className="text-slate-600 text-sm">{invoiceData.notes}</p>
+            <p className="text-slate-600">{invoiceData.notes}</p>
           </div>
         )}
         {invoiceData.terms && (
           <div>
             <h4 className="font-semibold text-slate-800 mb-2">Terms & Conditions:</h4>
-            <p className="text-slate-600 text-sm">{invoiceData.terms}</p>
+            <p className="text-slate-600">{invoiceData.terms}</p>
           </div>
         )}
       </div>
