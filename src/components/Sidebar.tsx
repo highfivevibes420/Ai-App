@@ -19,7 +19,8 @@ import {
   Moon,
   Sun,
   Menu,
-  X
+  X,
+  Shield
 } from 'lucide-react';
 import { TierManager, TIERS } from '../lib/tiers';
 import { useTheme } from '../contexts/ThemeContext';
