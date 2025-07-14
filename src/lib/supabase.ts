@@ -151,7 +151,7 @@ export const auth = {
     }
     return await supabase.auth.getSession()
   },
-}
+
   async updatePassword(newPassword: string) {
     if (isDemoMode || !supabase) {
       console.log('📱 Demo mode: Password update simulated')
@@ -168,6 +168,7 @@ export const auth = {
       return { error: error as any }
     }
   }
+}
 
 // Email service
 export const emailService = {
