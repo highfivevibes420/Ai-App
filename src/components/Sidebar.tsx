@@ -61,10 +61,12 @@ const Sidebar: React.FC<SidebarProps> = ({
     { id: 'crm', label: 'CRM & Leads', icon: Users },
   ];
 
-  // Only show admin panel for admin users
-  const isAdmin = user?.email === 'admin@example.com' || user?.email === 'ayyan@digitalsolutions.com';
+  // Super admin accounts that can access admin panel
+  const isSuperAdmin = user?.email === 'admin@example.com' || 
+                       user?.email === 'ayyan@digitalsolutions.com' ||
+                       user?.email === 'superadmin@aiassistant.com';
   
-  const adminMenuItems = isAdmin ? [
+  const adminMenuItems = isSuperAdmin ? [
     { id: 'admin', label: 'Admin Panel', icon: Shield },
   ] : [];
 

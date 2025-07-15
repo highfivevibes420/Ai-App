@@ -62,8 +62,8 @@ const Dashboard: React.FC<DashboardProps> = ({ setActiveSection, user }) => {
             color: 'text-blue-600' 
           },
           { 
-            label: 'Team Members', 
-            value: (data.team_members || 1).toString(), 
+            label: 'Total Leads', 
+            value: (data.leads || 0).toString(), 
             change: '+0', 
             icon: Users, 
             color: 'text-purple-600' 

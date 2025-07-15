@@ -824,14 +824,14 @@ export const database = {
     }
   },
 
-  // Admin functions
+  // Super Admin functions
   async getAllUsers() {
     if (isDemoMode) {
       return { data: [JSON.parse(localStorage.getItem('demoUser') || '{}')], error: null }
     }
     
     try {
-      console.log('👥 Fetching all users (admin)')
+      console.log('👥 Fetching all users (super admin)')
       const { data, error } = await supabase
         .from('users')
         .select('*')
@@ -842,7 +842,7 @@ export const database = {
         return { data: [], error }
       }
       
-      console.log('✅ All users fetched:', data?.length || 0)
+      console.log('✅ All users fetched by super admin:', data?.length || 0)
       return { data: data || [], error: null }
     } catch (error) {
       console.error('❌ Get all users error:', error)
@@ -856,7 +856,7 @@ export const database = {
     }
     
     try {
-      console.log('💳 Fetching all payments (admin)')
+      console.log('💳 Fetching all payments (super admin)')
       const { data, error } = await supabase
         .from('payments')
         .select(`
@@ -873,7 +873,7 @@ export const database = {
         return { data: [], error }
       }
       
-      console.log('✅ All payments fetched:', data?.length || 0)
+      console.log('✅ All payments fetched by super admin:', data?.length || 0)
       return { data: data || [], error: null }
     } catch (error) {
       console.error('❌ Get all payments error:', error)
