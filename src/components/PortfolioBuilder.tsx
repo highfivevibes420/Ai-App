@@ -1,135 +1,135 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Globe, 
-  Edit, 
-  Eye, 
-  Share2, 
-  Save, 
-  Plus, 
-  Trash2,
-  ExternalLink,
-  Copy,
-  Check
+import {
+    Globe,
+    Edit,
+    Eye,
+    Share2,
+    Save,
+    Plus,
+    Trash2,
+    ExternalLink,
+    Copy,
+    Check
 } from 'lucide-react';
 import { database } from '../lib/database';
 
 interface PortfolioBuilderProps {
-  user: any;
+    user: any;
 }
 
-const PortfolioBuilder: React.FC<PortfolioBuilderProps> = ({ user }) => {
-  const [portfolio, setPortfolio] = useState({
-    business_name: '',
-    tagline: '',
-    description: '',
-    services: [''],
-    contact_info: {
-      email: '',
-      phone: '',
-      address: ''
-    },
-    social_links: {
-      website: '',
-      linkedin: '',
-      facebook: '',
-      twitter: '',
-      instagram: ''
-    },
-    is_public: false,
-    slug: ''
-  });
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [copied, setCopied] = useState(false);
-  const [previewMode, setPreviewMode] = useState(false);
-
-  useEffect(() => {
-    loadPortfolio();
-  }, [user]);
-
-  const loadPortfolio = async () => {
-    if (!user) return;
-    
-    setLoading(true);
-    const { data, error } = await database.getPortfolio(user.id);
-    
-    if (data) {
-      setPortfolio(data);
-    } else {
-      // Initialize with user data
-      setPortfolio(prev => ({
-        ...prev,
-        business_name: user.company || `${user.name}'s Business`,
+const PortfolioBuilder: React.FC < PortfolioBuilderProps > = ({ user }) => {
+    const [portfolio, setPortfolio] = useState({
+        business_name: '',
+        tagline: '',
+        description: '',
+        services: [''],
         contact_info: {
-          ...prev.contact_info,
-          email: user.email
+            email: '',
+            phone: '',
+            address: ''
         },
-        slug: user.name.toLowerCase().replace(/\s+/g, '-')
-      }));
-    }
-    setLoading(false);
-  };
+        social_links: {
+            website: '',
+            linkedin: '',
+            facebook: '',
+            twitter: '',
+            instagram: ''
+        },
+        is_public: false,
+        slug: ''
+    });
+    const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
+    const [copied, setCopied] = useState(false);
+    const [previewMode, setPreviewMode] = useState(false);
 
-  const handleSave = async () => {
-    setSaving(true);
-    
-    if (!user) {
-      alert('Please log in to save your portfolio');
-      setSaving(false);
-      return;
-    }
-    
-    const portfolioData = {
-      ...portfolio,
-      slug: portfolio.slug || portfolio.business_name.toLowerCase().replace(/\s+/g, '-'),
-      unique_id: `${user.id}-${Date.now()}` // Add unique identifier for shareable links
+    useEffect(() => {
+        loadPortfolio();
+    }, [user]);
+
+    const loadPortfolio = async () => {
+        if (!user) return;
+
+        setLoading(true);
+        const { data, error } = await database.getPortfolio(user.id);
+
+        if (data) {
+            setPortfolio(data);
+        } else {
+            // Initialize with user data
+            setPortfolio(prev => ({
+                ...prev,
+                business_name: user.company || `${user.name}'s Business`,
+                contact_info: {
+                    ...prev.contact_info,
+                    email: user.email
+                },
+                slug: user.name.toLowerCase().replace(/\s+/g, '-')
+            }));
+        }
+        setLoading(false);
     };
-    
-    console.log('💾 Saving portfolio:', portfolioData);
-    const { data, error } = await database.createOrUpdatePortfolio(portfolioData);
-    
-    if (!error && data) {
-      setPortfolio(data);
-      console.log('✅ Portfolio saved successfully:', data);
-      alert('Portfolio saved successfully!');
-    } else {
-      console.error('❌ Portfolio save error:', error);
-      alert(`Error saving portfolio: ${error?.message || 'Please try again.'}`);
-    }
-    
-    setSaving(false);
-  };
 
-  const addService = () => {
-    setPortfolio(prev => ({
-      ...prev,
-      services: [...prev.services, '']
-    }));
-  };
+    const handleSave = async () => {
+        setSaving(true);
 
-  const removeService = (index: number) => {
-    setPortfolio(prev => ({
-      ...prev,
-      services: prev.services.filter((_, i) => i !== index)
-    }));
-  };
+        if (!user) {
+            alert('Please log in to save your portfolio');
+            setSaving(false);
+            return;
+        }
 
-  const updateService = (index: number, value: string) => {
-    setPortfolio(prev => ({
-      ...prev,
-      services: prev.services.map((service, i) => i === index ? value : service)
-    }));
-  };
+        const portfolioData = {
+            ...portfolio,
+            slug: portfolio.slug || portfolio.business_name.toLowerCase().replace(/\s+/g, '-'),
+            unique_id: `${user.id}-${Date.now()}` // Add unique identifier for shareable links
+        };
 
-  const copyPortfolioLink = () => {
-    const link = `${window.location.origin}/portfolio/${portfolio.slug}`;
-    navigator.clipboard.writeText(link);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+        console.log('💾 Saving portfolio:', portfolioData);
+        const { data, error } = await database.createOrUpdatePortfolio(portfolioData);
 
-  const PortfolioPreview = () => (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+        if (!error && data) {
+            setPortfolio(data);
+            console.log('✅ Portfolio saved successfully:', data);
+            alert('Portfolio saved successfully!');
+        } else {
+            console.error('❌ Portfolio save error:', error);
+            alert(`Error saving portfolio: ${error?.message || 'Please try again.'}`);
+        }
+
+        setSaving(false);
+    };
+
+    const addService = () => {
+        setPortfolio(prev => ({
+            ...prev,
+            services: [...prev.services, '']
+        }));
+    };
+
+    const removeService = (index: number) => {
+        setPortfolio(prev => ({
+            ...prev,
+            services: prev.services.filter((_, i) => i !== index)
+        }));
+    };
+
+    const updateService = (index: number, value: string) => {
+        setPortfolio(prev => ({
+            ...prev,
+            services: prev.services.map((service, i) => i === index ? value : service)
+        }));
+    };
+
+    const copyPortfolioLink = () => {
+        const link = `${window.location.origin}/portfolio/${portfolio.slug}`;
+        navigator.clipboard.writeText(link);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
+
+    const PortfolioPreview = () => (
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-8">
         <h1 className="text-3xl font-bold mb-2">{portfolio.business_name}</h1>
@@ -198,20 +198,20 @@ const PortfolioBuilder: React.FC<PortfolioBuilderProps> = ({ user }) => {
         </section>
       </div>
     </div>
-  );
+    );
 
-  if (loading) {
-    return (
-      <div className="text-center py-12">
+    if (loading) {
+        return (
+            <div className="text-center py-12">
         <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
         <p className="text-slate-600 dark:text-gray-400">Loading portfolio...</p>
       </div>
-    );
-  }
+        );
+    }
 
-  if (previewMode) {
-    return (
-      <div className="space-y-6">
+    if (previewMode) {
+        return (
+            <div className="space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold text-slate-800 dark:text-white">Portfolio Preview</h1>
           <div className="flex space-x-3">
@@ -235,11 +235,11 @@ const PortfolioBuilder: React.FC<PortfolioBuilderProps> = ({ user }) => {
         </div>
         <PortfolioPreview />
       </div>
-    );
-  }
+        );
+    }
 
-  return (
-    <div className="space-y-8">
+    return (
+        <div className="space-y-8">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -586,9 +586,33 @@ const PortfolioBuilder: React.FC<PortfolioBuilderProps> = ({ user }) => {
           )}
       </div>
 
-      
-  
-  );
+      {/* Portfolio Link */}
+      {portfolio.is_public && portfolio.slug && (
+        <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-semibold text-green-800 dark:text-green-300">Portfolio is Live!</h3>
+              <p className="text-green-700 dark:text-green-400 text-sm">
+                Your portfolio is publicly accessible at:
+              </p>
+              <code className="text-green-800 dark:text-green-300 bg-green-100 dark:bg-green-900/40 px-2 py-1 rounded text-sm">
+                {window.location.origin}/portfolio/{portfolio.slug}
+              </code>
+            </div>
+            <button
+              onClick={copyPortfolioLink}
+              className="flex items-center space-x-2 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            >
+              {copied ? <Check className="w-4 h-4" /> : <Share2 className="w-4 h-4" />}
+              <span>{copied ? 'Copied!' : 'Share'}</span>
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+
+
+    );
 };
 
 export default PortfolioBuilder;
