@@ -43,6 +43,7 @@ function App() {
     if (path.startsWith('/portfolio/')) {
       const slug = path.split('/portfolio/')[1];
       setCurrentPage('portfolio-public');
+      setLoading(false); // Set loading to false for portfolio routes
       return;
     }
     

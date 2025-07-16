@@ -81,7 +81,8 @@ const PortfolioBuilder: React.FC<PortfolioBuilderProps> = ({ user }) => {
     
     const portfolioData = {
       ...portfolio,
-      slug: portfolio.slug || portfolio.business_name.toLowerCase().replace(/\s+/g, '-')
+      slug: portfolio.slug || portfolio.business_name.toLowerCase().replace(/\s+/g, '-'),
+      unique_id: `${user.id}-${Date.now()}` // Add unique identifier for shareable links
     };
     
     console.log('💾 Saving portfolio:', portfolioData);
@@ -458,6 +459,131 @@ const PortfolioBuilder: React.FC<PortfolioBuilderProps> = ({ user }) => {
               </div>
             ))}
           </div>
+        </div>
+      </div>
+
+      {/* Portfolio Link */}
+      {portfolio.is_public && portfolio.slug && (
+            <div className="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 border border-green-200 dark:border-green-800 rounded-lg p-6">
+          <div className="flex items-center justify-between">
+            <div>
+                  <h3 className="font-semibold text-green-800 dark:text-green-300 mb-2">🎉 Portfolio is Live!</h3>
+                  <p className="text-green-700 dark:text-green-400 text-sm mb-3">
+                    Your beautiful, animated portfolio is now publicly accessible:
+              </p>
+                  <div className="bg-white dark:bg-gray-800 p-3 rounded-lg border border-green-200 dark:border-green-700 mb-3">
+                    <code className="text-green-800 dark:text-green-300 text-sm font-mono">
+                      {window.location.origin}/portfolio/{portfolio.slug}
+                    </code>
+                  </div>
+                  <div className="flex flex-wrap gap-2 text-xs text-green-600 dark:text-green-400">
+                    <span className="flex items-center space-x-1">
+                      <span>✨</span>
+                      <span>Animated Design</span>
+                    </span>
+                    <span className="flex items-center space-x-1">
+                      <span>📱</span>
+                      <span>Mobile Responsive</span>
+                    </span>
+                    <span className="flex items-center space-x-1">
+                      <span>🚀</span>
+                      <span>Fast Loading</span>
+                    </span>
+                    <span className="flex items-center space-x-1">
+                      <span>🎨</span>
+                      <span>Professional Images</span>
+                    </span>
+                  </div>
+                </div>
+                <div className="flex flex-col space-y-2">
+                  <button
+                    onClick={copyPortfolioLink}
+                    className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                  >
+                    {copied ? <Check className="w-4 h-4" /> : <Share2 className="w-4 h-4" />}
+                    <span>{copied ? 'Copied!' : 'Share Link'}</span>
+                  </button>
+                  <a
+                    href={`${window.location.origin}/portfolio/${portfolio.slug}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-center"
+                  >
+                    <Eye className="w-4 h-4" />
+                    <span>View Live</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Portfolio Preview */}
+          {portfolio.business_name && (
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-slate-200 dark:border-gray-700">
+              <h2 className="text-xl font-semibold text-slate-800 dark:text-white mb-4">Portfolio Preview Features</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="flex items-center space-x-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                  <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                    <span className="text-white text-sm">🎨</span>
+                  </div>
+                  <div>
+                    <p className="font-medium text-slate-800 dark:text-white text-sm">Animated Hero Section</p>
+                    <p className="text-slate-600 dark:text-gray-400 text-xs">Eye-catching entrance</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center space-x-3 p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                  <div className="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
+                    <span className="text-white text-sm">📸</span>
+                  </div>
+                  <div>
+                    <p className="font-medium text-slate-800 dark:text-white text-sm">Professional Images</p>
+                    <p className="text-slate-600 dark:text-gray-400 text-xs">High-quality visuals</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center space-x-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                  <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
+                    <span className="text-white text-sm">📱</span>
+                  </div>
+                  <div>
+                    <p className="font-medium text-slate-800 dark:text-white text-sm">Mobile Responsive</p>
+                    <p className="text-slate-600 dark:text-gray-400 text-xs">Perfect on all devices</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center space-x-3 p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
+                  <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
+                    <span className="text-white text-sm">⚡</span>
+                  </div>
+                  <div>
+                    <p className="font-medium text-slate-800 dark:text-white text-sm">Fast Loading</p>
+                    <p className="text-slate-600 dark:text-gray-400 text-xs">Optimized performance</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center space-x-3 p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg">
+                  <div className="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center">
+                    <span className="text-white text-sm">🔗</span>
+                  </div>
+                  <div>
+                    <p className="font-medium text-slate-800 dark:text-white text-sm">Shareable Link</p>
+                    <p className="text-slate-600 dark:text-gray-400 text-xs">Easy to share</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center space-x-3 p-3 bg-pink-50 dark:bg-pink-900/20 rounded-lg">
+                  <div className="w-8 h-8 bg-pink-500 rounded-lg flex items-center justify-center">
+                    <span className="text-white text-sm">✨</span>
+                  </div>
+                  <div>
+                    <p className="font-medium text-slate-800 dark:text-white text-sm">Smooth Animations</p>
+                    <p className="text-slate-600 dark:text-gray-400 text-xs">Engaging interactions</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
