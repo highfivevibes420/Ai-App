@@ -587,7 +587,7 @@ const PortfolioBuilder: React.FC<PortfolioBuilderProps> = ({ user }) => {
       </div>
 
       
-    </div>
+  
   );
 };
 
