@@ -585,7 +585,7 @@ const PortfolioBuilder: React.FC<PortfolioBuilderProps> = ({ user }) => {
             </div>
           )}
       </div>
-
+</div>
       {portfolio.is_public && portfolio.slug && (
   <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
     <div className="flex items-center justify-between">
