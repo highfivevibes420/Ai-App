@@ -585,30 +585,8 @@ const PortfolioBuilder: React.FC<PortfolioBuilderProps> = ({ user }) => {
             </div>
           )}
       </div>
-</div>
-      {portfolio.is_public && portfolio.slug && (
-  <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
-    <div className="flex items-center justify-between">
-      <div>
-        <h3 className="font-semibold text-green-800 dark:text-green-300">Portfolio is Live!</h3>
-        <p className="text-green-700 dark:text-green-400 text-sm">
-          Your portfolio is publicly accessible at:
-        </p>
-        <code className="text-green-800 dark:text-green-300 bg-green-100 dark:bg-green-900/40 px-2 py-1 rounded text-sm">
-          {window.location.origin}/portfolio/{portfolio.slug}
-        </code>
-      </div>
-      <button
-        onClick={copyPortfolioLink}
-        className="flex items-center space-x-2 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-      >
-        {copied ? <Check className="w-4 h-4" /> : <Share2 className="w-4 h-4" />}
-        <span>{copied ? 'Copied!' : 'Share'}</span>
-      </button>
-    </div>
-  </div>
-)}
 
+      
     </div>
   );
 };
