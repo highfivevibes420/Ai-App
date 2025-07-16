@@ -584,7 +584,6 @@ const PortfolioBuilder: React.FC < PortfolioBuilderProps > = ({ user }) => {
               </div>
             </div>
           )}
-      </div>
 
       {/* Portfolio Link */}
       {portfolio.is_public && portfolio.slug && (
@@ -609,8 +608,7 @@ const PortfolioBuilder: React.FC < PortfolioBuilderProps > = ({ user }) => {
           </div>
         </div>
       )}
-    </div>
-
+      </div>
 
     );
 };
