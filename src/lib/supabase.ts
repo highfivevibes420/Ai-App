@@ -155,17 +155,28 @@ export const auth = {
   async updatePassword(newPassword: string) {
     if (isDemoMode || !supabase) {
       console.log('📱 Demo mode: Password update simulated')
-      return { error: null }
+      return { data: { user: null }, error: null }
     }
     
     try {
       console.log('🔐 Updating password...')
-      const result = await supabase.auth.updateUser({ password: newPassword })
+      // First check if user is authenticated
+      const { data: { user }, error: userError } = await supabase.auth.getUser()
+      
+      if (userError || !user) {
+        console.error('❌ User not authenticated for password update')
+        return { data: null, error: { message: 'Please log in again to update your password' } }
+      }
+      
+      const result = await supabase.auth.updateUser({ 
+        password: newPassword 
+      })
+      
       console.log('✅ Password update result:', { success: !result.error })
       return result
     } catch (error) {
       console.error('❌ Password update error:', error)
-      return { error: error as any }
+      return { data: null, error: error as any }
     }
   }
 }

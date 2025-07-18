@@ -4,6 +4,7 @@ import { TIERS } from '../lib/tiers';
 import { database } from '../lib/database';
 import { emailService, dbFunctions } from '../lib/supabase';
 import { TierManager } from '../lib/tiers';
+import { CurrencyManager } from '../lib/currency';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -52,13 +53,24 @@ Amount: $${tier.price.toFixed(2)}`;
       alert('Please fill in all required fields');
       return;
     }
+    
+    if (!user || !user.id) {
+      alert('User session expired. Please log in again.');
+      return;
+    }
+    
+    const amount = parseFloat(paymentData.transferAmount);
+    if (isNaN(amount) || amount <= 0) {
+      alert('Please enter a valid payment amount');
+      return;
+    }
 
     setIsSubmitting(true);
 
     try {
       // Create payment record
       const payment = {
-        amount: parseFloat(paymentData.transferAmount),
+        amount: amount,
         currency: 'USD',
         status: 'pending',
         payment_method: 'bank_transfer',
@@ -82,15 +94,17 @@ Amount: $${tier.price.toFixed(2)}`;
         await dbFunctions.updateUserTier(user.id, selectedTier);
         TierManager.setTier(selectedTier);
         
+        console.log('✅ Payment processed and tier updated successfully')
         alert(`Payment submitted successfully! Your plan has been upgraded to ${tier.name}.`);
         window.location.reload();
       } else {
+        console.error('❌ Payment creation failed:', error)
         alert('Error processing payment. Please try again.');
       }
 
     } catch (error) {
       console.error('Payment error:', error);
-      alert('Error processing payment. Please try again.');
+      alert(`Error processing payment: ${error instanceof Error ? error.message : 'Please try again.'}`);
     } finally {
       setIsSubmitting(false);
       onClose();
@@ -116,6 +130,9 @@ Amount: $${tier.price.toFixed(2)}`;
           {/* Order Summary */}
           <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
             <h3 className="font-semibold text-blue-800 dark:text-blue-300 mb-2">{tier.name} Plan</h3>
+            <p className="text-xs text-blue-600 dark:text-blue-400 mb-3">
+              Payment processed in USD. Your dashboard will display amounts in {CurrencyManager.getUserCurrency()}.
+            </p>
             <div className="space-y-1 text-sm">
               <div className="flex justify-between">
                 <span className="text-blue-700 dark:text-blue-400">Monthly subscription:</span>
@@ -124,6 +141,10 @@ Amount: $${tier.price.toFixed(2)}`;
               <div className="flex justify-between font-semibold border-t border-blue-300 dark:border-blue-700 pt-1">
                 <span className="text-blue-800 dark:text-blue-300">Total Amount:</span>
                 <span className="text-blue-800 dark:text-blue-300">${tier.price.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between text-xs text-blue-600 dark:text-blue-400 pt-1">
+                <span>Equivalent in {CurrencyManager.getUserCurrency()}:</span>
+                <span>{CurrencyManager.formatAmount(tier.price)}</span>
               </div>
             </div>
           </div>
@@ -186,6 +207,9 @@ Amount: $${tier.price.toFixed(2)}`;
               <div className="mt-4 p-3 bg-green-100 dark:bg-green-900/20 rounded border border-green-200 dark:border-green-800">
                 <p className="text-green-800 dark:text-green-300 font-semibold">
                   Transfer Amount: ${tier.price.toFixed(2)}
+                </p>
+                <p className="text-xs text-green-700 dark:text-green-400 mt-1">
+                  (Approximately {CurrencyManager.formatAmount(tier.price)} in your display currency)
                 </p>
               </div>
             </div>

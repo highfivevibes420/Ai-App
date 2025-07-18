@@ -763,7 +763,7 @@ export const database = {
     }
   },
 
-  // Stats
+  // Stats (removed team_members)
   async getStats(userId?: string) {
     if (isDemoMode) {
       const totalRevenue = demoData.invoices
@@ -779,8 +779,7 @@ export const database = {
           revenue: totalRevenue,
           campaigns: activeCampaigns,
           tasks: completedTasks,
-          leads: totalLeads,
-          team_members: demoData.team_members.length
+          leads: totalLeads
         }, 
         error: null 
       }
@@ -795,13 +794,12 @@ export const database = {
       
       console.log('📊 Calculating stats for user:', user.id)
       
-      // Get all data for stats calculation
-      const [invoicesResult, campaignsResult, tasksResult, leadsResult, teamResult] = await Promise.all([
+      // Get all data for stats calculation (removed team members)
+      const [invoicesResult, campaignsResult, tasksResult, leadsResult] = await Promise.all([
         this.getInvoices(user.id),
         this.getCampaigns(user.id),
         this.getTasks(user.id),
-        this.getLeads(user.id),
-        this.getTeamMembers(user.id)
+        this.getLeads(user.id)
       ])
       
       const totalRevenue = invoicesResult.data?.filter(inv => inv.status === 'paid').reduce((sum, inv) => sum + (inv.amount || 0), 0) || 0
@@ -812,8 +810,7 @@ export const database = {
         revenue: totalRevenue,
         campaigns: activeCampaigns,
         tasks: completedTasks,
-        leads: leadsResult.data?.length || 0,
-        team_members: teamResult.data?.length || 0
+        leads: leadsResult.data?.length || 0
       }
       
       console.log('✅ Stats calculated:', stats)

@@ -16,9 +16,11 @@ import PostMaker from './components/PostMaker';
 import AccountingTools from './components/AccountingTools';
 import AdminPanel from './components/AdminPanel';
 import PublicPortfolio from './components/PublicPortfolio';
+import TodoList from './components/TodoList';
 import { database } from './lib/database';
 import { emailService, auth, isDemoMode } from './lib/supabase';
 import { Menu } from 'lucide-react';
+import { CurrencyManager } from './lib/currency';
 
 interface User {
   id: string;
@@ -45,6 +47,11 @@ function App() {
       setCurrentPage('portfolio-public');
       setLoading(false); // Set loading to false for portfolio routes
       return;
+    }
+    
+    // Initialize currency rates if needed
+    if (CurrencyManager.shouldUpdateRates()) {
+      CurrencyManager.updateExchangeRates();
     }
     
     initializeApp();
@@ -159,6 +166,8 @@ function App() {
         return <AccountingTools />;
       case 'admin':
         return <AdminPanel />;
+      case 'todos':
+        return <TodoList />;
       default:
         return <Dashboard setActiveSection={setActiveSection} user={user} />;
     }

@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { database } from '../lib/database';
 import InvoiceGenerator from './InvoiceGenerator';
+import { CurrencyManager } from '../lib/currency';
 
 const FinanceTools: React.FC = () => {
   const [selectedTool, setSelectedTool] = useState('invoice');
@@ -424,93 +425,6 @@ const FinanceTools: React.FC = () => {
               </div>
             </div>
           )}
-          
-          {selectedTool === 'tax' && (
-            <div className="space-y-6">
-              <div className="bg-slate-50 dark:bg-gray-700 rounded-lg p-6 border dark:border-gray-600">
-                <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-4">Tax Calculator</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
-                      Annual Income *
-                    </label>
-                    <input
-                      type="number"
-                      placeholder="60000"
-                      className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
-                      Business Expenses *
-                    </label>
-                    <input
-                      type="number"
-                      placeholder="15000"
-                      className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
-                      Filing Status *
-                    </label>
-                    <select className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white" required>
-                      <option value="">Select Status</option>
-                      <option value="single">Single</option>
-                      <option value="married">Married Filing Jointly</option>
-                      <option value="married-separate">Married Filing Separately</option>
-                      <option value="head">Head of Household</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
-                      State *
-                    </label>
-                    <select className="w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white" required>
-                      <option value="">Select State</option>
-                      <option value="ca">California</option>
-                      <option value="ny">New York</option>
-                      <option value="tx">Texas</option>
-                      <option value="fl">Florida</option>
-                      <option value="other">Other</option>
-                    </select>
-                  </div>
-                </div>
-                <button className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                  Calculate Tax
-                </button>
-              </div>
-              
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-slate-200 dark:border-gray-700">
-                <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-4">Tax Estimation Results</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="text-center p-4 bg-slate-50 dark:bg-gray-700 rounded-lg">
-                    <p className="text-2xl font-bold text-slate-800 dark:text-white">$45,000</p>
-                    <p className="text-sm text-slate-600 dark:text-gray-400">Taxable Income</p>
-                  </div>
-                  <div className="text-center p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
-                    <p className="text-2xl font-bold text-red-600">$9,450</p>
-                    <p className="text-sm text-red-700 dark:text-red-400">Federal Tax</p>
-                  </div>
-                  <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                    <p className="text-2xl font-bold text-blue-600">$2,250</p>
-                    <p className="text-sm text-blue-700 dark:text-blue-400">State Tax</p>
-                  </div>
-                </div>
-                <div className="mt-4 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
-                  <h4 className="font-semibold text-green-800 dark:text-green-300 mb-2">💡 Tax Saving Tips</h4>
-                  <ul className="text-green-700 dark:text-green-400 text-sm space-y-1">
-                    <li>• Consider maximizing retirement contributions ($6,500 IRA limit)</li>
-                    <li>• Track all business expenses for deductions</li>
-                    <li>• Consider quarterly estimated tax payments</li>
-                    <li>• Consult a tax professional for complex situations</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </div>
 
@@ -551,7 +465,7 @@ const FinanceTools: React.FC = () => {
                   <tr key={invoice.id} className="border-b border-slate-100 hover:bg-slate-50">
                     <td className="py-3 px-4 font-medium text-slate-800">{invoice.invoice_number}</td>
                     <td className="py-3 px-4 text-slate-600">{invoice.client_name}</td>
-                    <td className="py-3 px-4 text-slate-600">${invoice.amount?.toLocaleString()}</td>
+                    <td className="py-3 px-4 text-slate-600">{CurrencyManager.formatAmount(invoice.amount || 0)}</td>
                     <td className="py-3 px-4">
                       <span className={`px-2 py-1 text-xs rounded-full ${
                         invoice.status === 'paid' ? 'bg-green-100 text-green-800' :
