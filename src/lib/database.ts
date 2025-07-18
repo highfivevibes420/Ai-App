@@ -445,7 +445,8 @@ export const database = {
       const portfolio = {
         ...portfolioData,
         id: existingIndex >= 0 ? demoData.portfolios[existingIndex].id : Date.now().toString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
+        unique_id: portfolioData.unique_id || `portfolio-${portfolioData.user_id || 'demo'}-${Date.now()}`
       }
       
       if (existingIndex >= 0) {
@@ -468,7 +469,8 @@ export const database = {
       const portfolio = {
         ...portfolioData,
         user_id: user.id,
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
+        unique_id: portfolioData.unique_id || `portfolio-${user.id}-${Date.now()}`
       }
       
       console.log('💾 Creating/updating portfolio:', portfolio)
